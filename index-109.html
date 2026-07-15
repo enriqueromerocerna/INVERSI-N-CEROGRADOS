@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gastos por Realizar · CERO GRADOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Nunito', sans-serif;
+    background:#FFF8EC;
+    color:#290D62;
+    padding:40px 16px 60px;
+  }
+  .receipt {
+    max-width:420px;
+    margin:0 auto;
+    background:#FFFDF9;
+    border-radius:10px;
+    padding:30px 26px 24px;
+    box-shadow:0 14px 34px rgba(41,13,98,0.14);
+  }
+  .brand {
+    text-align:center;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:1rem;
+    letter-spacing:2.5px;
+    color:#FE018F;
+  }
+  h1 {
+    text-align:center;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.45rem;
+    color:#290D62;
+    margin-top:6px;
+  }
+  .subtitle {
+    text-align:center;
+    font-size:0.82rem;
+    color:#8a7fa3;
+    margin-top:4px;
+  }
+  .rule {
+    border:none;
+    border-top:2px dashed #e7dcc4;
+    margin:20px 0 18px;
+  }
+  .rule.total-rule {
+    border-top:2px dashed #FE018F;
+    margin:16px 0 14px;
+  }
+  .cat-label {
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:0.72rem;
+    letter-spacing:1.2px;
+    color:#FE018F;
+    margin-bottom:8px;
+  }
+  .item-row {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    font-size:0.92rem;
+    color:#4a4458;
+    padding:3px 0;
+  }
+  .item-row span:last-child {
+    font-family:'Space Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    white-space:nowrap;
+  }
+  .subtotal-row {
+    display:flex;
+    justify-content:space-between;
+    font-size:0.85rem;
+    font-weight:700;
+    color:#290D62;
+    padding-top:5px;
+    margin-bottom:20px;
+  }
+  .subtotal-row span:last-child {
+    font-family:'Space Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .total-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .total-row .label {
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    color:#290D62;
+  }
+  .total-row .amount {
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:1.5rem;
+    color:#FE018F;
+  }
+  footer {
+    text-align:center;
+    margin-top:26px;
+    font-size:0.72rem;
+    color:#b3a8c9;
+  }
+</style>
+</head>
+<body>
+<div class="receipt">
+  <div class="brand">CERO GRADOS</div>
+  <h1>Gastos por Realizar</h1>
+  <div class="subtitle">Detalle de insumos y materiales pendientes</div>
+  <hr class="rule">
+
+  <div class="cat-label">VASOS PARA RASPADILLA</div>
+  <div class="item-row"><span>Dos cajas de vasos</span><span>S/ 380.00</span></div>
+  <div class="item-row"><span>Retiro en agencia</span><span>S/ 63.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 443.00</span></div>
+
+  <div class="cat-label">STICKERS PARA VASOS</div>
+  <div class="item-row"><span>Stickers</span><span>S/ 150.00</span></div>
+  <div class="item-row"><span>Retiro en agencia</span><span>S/ 10.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 160.00</span></div>
+
+  <div class="cat-label">ESTANTE PARA POSTRES</div>
+  <div class="item-row"><span>Confección del estante</span><span>S/ 250.00</span></div>
+  <div class="item-row"><span>Vidrios</span><span>S/ 30.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 280.00</span></div>
+
+  <div class="cat-label">SORBETONES</div>
+  <div class="item-row"><span>Dos planchas</span><span>S/ 64.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 64.00</span></div>
+
+  <div class="cat-label">MARCIANOS</div>
+  <div class="item-row"><span>Stock de todos los sabores</span><span>S/ 300.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 300.00</span></div>
+
+  <div class="cat-label">EMPAQUE PARA POSTRES</div>
+  <div class="item-row"><span>Tuppers (millar)</span><span>S/ 220.00</span></div>
+  <div class="item-row"><span>Stickers y bolsas de celofán</span><span>S/ 100.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 320.00</span></div>
+
+  <div class="cat-label">JARABES DE RASPADILLA</div>
+  <div class="item-row"><span>Frutas para los jarabes</span><span>S/ 300.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 300.00</span></div>
+
+  <hr class="rule total-rule">
+  <div class="total-row">
+    <span class="label">TOTAL GENERAL</span>
+    <span class="amount">S/ 1,867.00</span>
+  </div>
+
+  <footer>Generado el 15 de julio de 2026</footer>
+</div>
+</body>
+</html>
