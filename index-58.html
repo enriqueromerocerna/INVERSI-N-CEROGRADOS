@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gastos por Realizar · CERO GRADOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Nunito', sans-serif;
+    background:#FFF8EC;
+    color:#290D62;
+    padding:40px 16px 60px;
+  }
+  .receipt {
+    max-width:420px;
+    margin:0 auto;
+    background:#FFFDF9;
+    border-radius:10px;
+    padding:30px 26px 24px;
+    box-shadow:0 14px 34px rgba(41,13,98,0.14);
+  }
+  .receipt + .receipt {
+    margin-top:28px;
+  }
+  .brand {
+    text-align:center;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:1rem;
+    letter-spacing:2.5px;
+    color:#FE018F;
+  }
+  h1 {
+    text-align:center;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.45rem;
+    color:#290D62;
+    margin-top:6px;
+  }
+  .subtitle {
+    text-align:center;
+    font-size:0.82rem;
+    color:#8a7fa3;
+    margin-top:4px;
+  }
+  .rule {
+    border:none;
+    border-top:2px dashed #e7dcc4;
+    margin:20px 0 18px;
+  }
+  .rule.total-rule {
+    border-top:2px dashed #FE018F;
+    margin:16px 0 14px;
+  }
+  .cat-label {
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:0.72rem;
+    letter-spacing:1.2px;
+    color:#FE018F;
+    margin-bottom:8px;
+  }
+  .item-row {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    font-size:0.92rem;
+    color:#4a4458;
+    padding:3px 0;
+  }
+  .item-row span:last-child {
+    font-family:'Space Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    white-space:nowrap;
+  }
+  .subtotal-row {
+    display:flex;
+    justify-content:space-between;
+    font-size:0.85rem;
+    font-weight:700;
+    color:#290D62;
+    padding-top:5px;
+    margin-bottom:20px;
+  }
+  .subtotal-row span:last-child {
+    font-family:'Space Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .total-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .total-row .label {
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    color:#290D62;
+  }
+  .total-row .amount {
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:1.5rem;
+    color:#FE018F;
+  }
+  footer {
+    text-align:center;
+    margin-top:26px;
+    font-size:0.72rem;
+    color:#b3a8c9;
+  }
+  .capital-summary {
+    margin-bottom:2px;
+  }
+  .capital-summary .total-row {
+    margin-bottom:14px;
+  }
+  .capital-summary .amount.over-budget {
+    color:#E63946;
+  }
+  .capital-bar-track {
+    width:100%;
+    height:7px;
+    background:#f1e9d8;
+    border-radius:6px;
+    overflow:hidden;
+    margin-bottom:16px;
+  }
+  .capital-bar-fill {
+    height:100%;
+    width:0%;
+    background:#FE018F;
+    border-radius:6px;
+    transition:width 0.35s ease, background 0.35s ease;
+  }
+  .capital-bar-fill.over-budget {
+    background:#E63946;
+  }
+  .gasto-form {
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    margin-bottom:2px;
+  }
+  .gasto-form input {
+    width:100%;
+    padding:11px 14px;
+    border-radius:8px;
+    border:1.5px solid #e7dcc4;
+    font-family:'Nunito', sans-serif;
+    font-size:0.92rem;
+    color:#290D62;
+    background:#FFF8EC;
+  }
+  .gasto-form input::placeholder {
+    color:#b3a8c9;
+  }
+  .gasto-form input:focus {
+    outline:none;
+    border-color:#FE018F;
+  }
+  .gasto-form button {
+    background:#FE018F;
+    color:#fff;
+    border:none;
+    padding:12px 16px;
+    border-radius:8px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:0.92rem;
+    letter-spacing:0.3px;
+    cursor:pointer;
+  }
+  .gasto-form button:active {
+    background:#D4017C;
+  }
+  .gasto-item {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    font-size:0.9rem;
+    color:#4a4458;
+    padding:9px 0;
+    border-bottom:1px dashed #e7dcc4;
+  }
+  .gasto-item:last-child {
+    border-bottom:none;
+  }
+  .gasto-concepto {
+    flex:1;
+    word-break:break-word;
+  }
+  .gasto-monto {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Space Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    white-space:nowrap;
+    color:#290D62;
+    font-weight:700;
+  }
+  .gasto-delete {
+    background:none;
+    border:none;
+    color:#c9bfd9;
+    font-size:1rem;
+    line-height:1;
+    cursor:pointer;
+    padding:4px;
+  }
+  .gasto-delete:active {
+    color:#FE018F;
+  }
+  .empty-state {
+    text-align:center;
+    color:#b3a8c9;
+    font-size:0.85rem;
+    padding:16px 0 6px;
+  }
+  .sync-status {
+    text-align:center;
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    color:#b3a8c9;
+    margin:2px 0 4px;
+  }
+  .sync-status.error {
+    color:#E63946;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .capital-bar-fill {
+      transition:none;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="receipt">
+  <div class="brand">CERO GRADOS</div>
+  <h1>Gastos por Realizar</h1>
+  <div class="subtitle">Detalle de insumos y materiales pendientes</div>
+  <hr class="rule">
+
+  <div class="cat-label">VASOS PARA RASPADILLA</div>
+  <div class="item-row"><span>Dos cajas de vasos</span><span>S/ 380.00</span></div>
+  <div class="item-row"><span>Retiro en agencia</span><span>S/ 63.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 443.00</span></div>
+
+  <div class="cat-label">STICKERS PARA VASOS</div>
+  <div class="item-row"><span>Stickers</span><span>S/ 150.00</span></div>
+  <div class="item-row"><span>Retiro en agencia</span><span>S/ 10.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 160.00</span></div>
+
+  <div class="cat-label">ESTANTE PARA POSTRES</div>
+  <div class="item-row"><span>Confección del estante</span><span>S/ 250.00</span></div>
+  <div class="item-row"><span>Vidrios</span><span>S/ 30.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 280.00</span></div>
+
+  <div class="cat-label">SORBETONES</div>
+  <div class="item-row"><span>Dos planchas</span><span>S/ 64.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 64.00</span></div>
+
+  <div class="cat-label">MARCIANOS</div>
+  <div class="item-row"><span>Stock de todos los sabores</span><span>S/ 300.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 300.00</span></div>
+
+  <div class="cat-label">EMPAQUE PARA POSTRES</div>
+  <div class="item-row"><span>Tuppers (millar)</span><span>S/ 220.00</span></div>
+  <div class="item-row"><span>Stickers y bolsas de celofán</span><span>S/ 100.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 320.00</span></div>
+
+  <div class="cat-label">JARABES DE RASPADILLA</div>
+  <div class="item-row"><span>Frutas para los jarabes</span><span>S/ 300.00</span></div>
+  <div class="subtotal-row"><span>Subtotal</span><span>S/ 300.00</span></div>
+
+  <hr class="rule total-rule">
+  <div class="total-row">
+    <span class="label">TOTAL GENERAL</span>
+    <span class="amount">S/ 1,867.00</span>
+  </div>
+
+  <footer>Generado el 15 de julio de 2026</footer>
+</div>
+
+<div class="receipt">
+  <div class="brand">CERO GRADOS</div>
+  <h1>Control de Capital</h1>
+  <div class="subtitle">Capital inicial: S/ 2,000.00</div>
+  <hr class="rule">
+
+  <div class="capital-summary">
+    <div class="total-row">
+      <span class="label">Capital Disponible</span>
+      <span class="amount" id="capitalDisponible">S/ 2,000.00</span>
+    </div>
+    <div class="capital-bar-track"><div class="capital-bar-fill" id="barraCapital"></div></div>
+    <div class="subtotal-row">
+      <span>Total gastado</span>
+      <span id="totalGastado">S/ 0.00</span>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <div class="sync-status" id="syncStatus">Conectando…</div>
+
+  <div class="cat-label">REGISTRAR GASTO</div>
+  <form class="gasto-form" id="formGasto">
+    <input type="text" id="conceptoInput" placeholder="¿En qué se gastó?" aria-label="Concepto del gasto" autocomplete="off" required>
+    <input type="number" id="montoInput" placeholder="Monto S/" aria-label="Monto del gasto" step="0.01" min="0.01" inputmode="decimal" required>
+    <button type="submit">Agregar gasto</button>
+  </form>
+
+  <hr class="rule">
+
+  <div class="cat-label">GASTOS REGISTRADOS</div>
+  <div id="listaGastos"></div>
+
+  <footer>Los gastos se sincronizan automáticamente en todos tus dispositivos</footer>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy
+  } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+  // ============================================================
+  // CONFIGURACIÓN DE FIREBASE
+  // Reemplaza estos valores por los de tu propio proyecto gratuito
+  // (los obtienes en https://console.firebase.google.com)
+  // ============================================================
+  var firebaseConfig = {
+    apiKey: "AIzaSyDMxmz9gtcY9WwZQiy5NNIUC91O9MSunEE",
+    authDomain: "inversion-2000.firebaseapp.com",
+    projectId: "inversion-2000",
+    storageBucket: "inversion-2000.firebasestorage.app",
+    messagingSenderId: "705762776814",
+    appId: "1:705762776814:web:9c3eed96dae9eeb958c5ff"
+  };
+  // ============================================================
+
+  var CAPITAL_INICIAL = 2000; // Cambia este número si el capital inicial cambia
+  var configPendiente = firebaseConfig.apiKey.indexOf('PEGA_AQUI') !== -1;
+  var gastosActuales = [];
+  var primerCargaCompleta = false;
+  var db;
+
+  function formatMonto(num) {
+    var sign = num < 0 ? '-' : '';
+    var abs = Math.abs(num);
+    return sign + 'S/ ' + abs.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function setEstado(texto, esError) {
+    var el = document.getElementById('syncStatus');
+    el.textContent = texto;
+    el.classList.toggle('error', !!esError);
+  }
+
+  function render() {
+    var lista = document.getElementById('listaGastos');
+    lista.innerHTML = '';
+
+    if (!primerCargaCompleta) {
+      var cargando = document.createElement('div');
+      cargando.className = 'empty-state';
+      cargando.textContent = 'Cargando gastos…';
+      lista.appendChild(cargando);
+    } else if (gastosActuales.length === 0) {
+      var vacio = document.createElement('div');
+      vacio.className = 'empty-state';
+      vacio.textContent = 'Aún no registraste ningún gasto.';
+      lista.appendChild(vacio);
+    } else {
+      gastosActuales.forEach(function (gasto) {
+        var row = document.createElement('div');
+        row.className = 'gasto-item';
+
+        var concepto = document.createElement('span');
+        concepto.className = 'gasto-concepto';
+        concepto.textContent = gasto.concepto;
+
+        var montoWrap = document.createElement('span');
+        montoWrap.className = 'gasto-monto';
+
+        var montoText = document.createElement('span');
+        montoText.textContent = formatMonto(gasto.monto);
+
+        var delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'gasto-delete';
+        delBtn.setAttribute('aria-label', 'Eliminar gasto');
+        delBtn.textContent = '\u2715';
+        delBtn.addEventListener('click', function () {
+          eliminarGasto(gasto.id);
+        });
+
+        montoWrap.appendChild(montoText);
+        montoWrap.appendChild(delBtn);
+        row.appendChild(concepto);
+        row.appendChild(montoWrap);
+        lista.appendChild(row);
+      });
+    }
+
+    var totalGastado = gastosActuales.reduce(function (sum, g) { return sum + g.monto; }, 0);
+    var capitalDisponible = CAPITAL_INICIAL - totalGastado;
+
+    document.getElementById('totalGastado').textContent = formatMonto(totalGastado);
+
+    var dispEl = document.getElementById('capitalDisponible');
+    dispEl.textContent = formatMonto(capitalDisponible);
+    dispEl.classList.toggle('over-budget', capitalDisponible < 0);
+
+    var barra = document.getElementById('barraCapital');
+    var porcentaje = Math.min(100, (totalGastado / CAPITAL_INICIAL) * 100);
+    barra.style.width = porcentaje + '%';
+    barra.classList.toggle('over-budget', totalGastado > CAPITAL_INICIAL);
+  }
+
+  function eliminarGasto(id) {
+    setEstado('Eliminando…');
+    deleteDoc(doc(db, 'gastos', id)).catch(function (err) {
+      console.error(err);
+      setEstado('No se pudo eliminar. Revisa tu conexión.', true);
+    });
+  }
+
+  document.getElementById('formGasto').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (configPendiente) {
+      setEstado('Falta configurar Firebase (ver instrucciones).', true);
+      return;
+    }
+    var conceptoInput = document.getElementById('conceptoInput');
+    var montoInput = document.getElementById('montoInput');
+    var concepto = conceptoInput.value.trim();
+    var monto = parseFloat(montoInput.value);
+
+    if (!concepto || isNaN(monto) || monto <= 0) return;
+
+    setEstado('Guardando…');
+    addDoc(collection(db, 'gastos'), { concepto: concepto, monto: monto, creado: Date.now() })
+      .then(function () {
+        conceptoInput.value = '';
+        montoInput.value = '';
+        conceptoInput.focus();
+      })
+      .catch(function (err) {
+        console.error(err);
+        setEstado('No se pudo guardar. Revisa tu conexión.', true);
+      });
+  });
+
+  if (configPendiente) {
+    setEstado('Falta configurar Firebase (ver instrucciones).', true);
+    render();
+  } else {
+    setEstado('Conectando…');
+    try {
+      var app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      var q = query(collection(db, 'gastos'), orderBy('creado'));
+
+      onSnapshot(q, function (snapshot) {
+        gastosActuales = snapshot.docs.map(function (d) {
+          var data = d.data();
+          return { id: d.id, concepto: data.concepto, monto: data.monto };
+        });
+        primerCargaCompleta = true;
+        setEstado('Sincronizado ✓ (visible en todos tus dispositivos)');
+        render();
+      }, function (err) {
+        console.error(err);
+        setEstado('No se pudo conectar. Revisa tu internet o la configuración.', true);
+      });
+    } catch (err) {
+      console.error(err);
+      setEstado('Error al iniciar la conexión.', true);
+    }
+  }
+</script>
+</body>
+</html>
